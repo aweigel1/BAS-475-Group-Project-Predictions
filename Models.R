@@ -37,3 +37,10 @@ test <- TSCredit_Diff %>%
   filter(Month >= yearmonth("2021 Jan"))
 
 #Models
+
+
+TSCredit %>%
+  model(NNETAR(sqrt(credit_in_millions))) %>%
+  forecast(h = 20) %>%
+  autoplot(credit_in_millions)
+

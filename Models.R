@@ -40,7 +40,11 @@ test <- TSCredit_Diff %>%
 
 
 TSCredit %>%
-  model(NNETAR(sqrt(credit_in_millions))) %>%
+  model(lm = TSLM(credit_in_millions ~  trend() + season()),
+        Drift= RW(credit_in_millions ~ drift()),
+        hw = ETS(credit_in_millions),
+        Mean = MEAN(credit_in_millions),
+        NNETAR(sqrt(credit_in_millions))) %>%
   forecast(h = 20) %>%
   autoplot(credit_in_millions)
 

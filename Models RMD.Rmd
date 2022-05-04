@@ -140,3 +140,14 @@ rmse <- function(y_actual, y_pred) {
 }
 rmse(holdout$credit_in_millions, y_preds)
 ```
+
+## Creating a new csv file
+
+```{r}
+write.csv(
+  BestModelFit,
+  file = "predictions.csv",
+  row.names = FALSE
+)
+```
+

@@ -104,20 +104,20 @@ fit2 %>%
 
 ### Neural Net Model ###
 
-fit <- train %>%
+fit3 <- train %>%
   model(NNET = NNETAR(credit_in_millions),
         arima210 = ARIMA(credit_in_millions ~ pdq(2,1,0)),
         arima013 = ARIMA(credit_in_millions ~ pdq(0,1,3)),
         stepwise = ARIMA(credit_in_millions),
         search = ARIMA(credit_in_millions, stepwise=FALSE))
 
-fit %>%
+fit3 %>%
   forecast(h = 12) %>% accuracy(credit)
 
-credit_in_millions_FC <- fit %>%
+credit_in_millions_FC <- fit3 %>%
   forecast(h=12)
 
-accuracy(fit, credit)
+accuracy(fit3, credit)
 ```
 
 ## Fitting best model

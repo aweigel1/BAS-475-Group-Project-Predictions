@@ -103,10 +103,11 @@ fit %>%
 
 
 #models i havent fit yet 
-NNET = NNETAR(credit_in_millions),
-arima012011 = ARIMA(Employed ~ pdq(0,1,2) + PDQ(0,1,1)),
-arima210011 = ARIMA(Employed ~ pdq(2,1,0) + PDQ(0,1,1)),
-auto = ARIMA(Employed, stepwise = FALSE, approx = FALSE)
+fit %>%
+  model(NNET = NNETAR(credit_in_millions),
+  arima012011 = ARIMA(Employed ~ pdq(0,1,2) + PDQ(0,1,1)),
+  arima210011 = ARIMA(Employed ~ pdq(2,1,0) + PDQ(0,1,1)),
+  auto = ARIMA(Employed, stepwise = FALSE, approx = FALSE))
 
 ```
 
@@ -123,6 +124,10 @@ BestModelFit <- train %>%
 ## Forecasting 12 months in future
 
 ```{r- forecasting}
+fit %>% 
+  forecast(h= "12 months") %>% 
+  accuracy(TSCredit_Diff) %>% 
+  arrange(RMSE)
 ```
 
 ## IF we want to use RMSE function (this is the last part of HW 7 I thought it would make interpretations easier but we can definitely remove it)

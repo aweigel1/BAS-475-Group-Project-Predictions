@@ -72,7 +72,8 @@ fit <- TSCredit_Diff %>%
     lm = TSLM(credit_in_millions ~  trend() + season()),
     ETS = ETS(credit_in_millions),
     SES = ETS(credit_in_millions~ error("A") + trend("N") + season("N")),
-    Damped = ETS(credit_in_millions ~ error("A") + trend("Ad") + season("N"))
+    Damped = ETS(credit_in_millions ~ error("A") + trend("Ad") + season("N")),
+    stepwise = ARIMA(credit_in_millions)
   )
 
 #Eliminated models::
@@ -141,9 +142,9 @@ fit4 %>%
 ```{r- best model}
 BestModelFit <- train %>% 
   model(
-    SES = ETS(credit_in_millions~ error("A") + trend("N") + season("N")
+    stepwise = ARIMA(credit_in_millions)
   )
-#RMSE = .130, next best is damped at .132
+#RMSE = .128, next best is SES at .13
 ```
 
 ## Forecasting 12 months in future

@@ -70,36 +70,36 @@ fit <- TSCredit_Diff %>%
   stretch_tsibble(.init = 48, .step = 24) %>% 
   model(
     lm = TSLM(credit_in_millions ~  trend() + season()),
-    Drift= RW(credit_in_millions ~ drift()),
-    hw = ETS(credit_in_millions),
-    SNaive = SNAIVE(credit_in_millions),
-    nnet = NNETAR(sqrt(credit_in_millions))
+    ETS = ETS(credit_in_millions),
+    SES = ETS(credit_in_millions~ error("A") + trend("N") + season("N")),
+    Damped = ETS(credit_in_millions ~ error("A") + trend("Ad") + season("N"))
   )
 
+#Eliminated models::
+#Drift= RW(credit_in_millions ~ drift()),
+#nnet = NNETAR(sqrt(credit_in_millions))
+#hw = ETS(credit_in_millions ~ error("M") + trend("Ad") + season("M"))
+# additive = ETS(credit_in_millions ~ error("A") + trend("A") + season("A")),
+#multiplicative = ETS(credit_in_millions ~ error("M") + trend("A") + season("M"))
+#Holt = ETS(credit_in_millions ~ error("A") + trend("A") + season("N")),
+#SNaive = SNAIVE(credit_in_millions),
+ 
 fit %>% 
   forecast(h= "12 months") %>% 
   accuracy(TSCredit_Diff) %>% 
   arrange(RMSE)
-```
 
-
-## Neural Net Model
-
-```{r}
-fit <- train %>%
-  model(NNET = NNETAR(credit_in_millions),
-        arima210 = ARIMA(credit_in_millions ~ pdq(2,1,0)),
-        arima013 = ARIMA(credit_in_millions ~ pdq(0,1,3)),
-        stepwise = ARIMA(credit_in_millions),
-        search = ARIMA(credit_in_millions, stepwise=FALSE))
-
-fit %>%
-  forecast(h = 12) %>% accuracy(credit)
-
-credit_in_millions_FC <- fit %>%
-  forecast(h = 12)
-
-accuracy(fit, credit)
+fit2 <- TSCredit_Diff %>% 
+  stretch_tsibble(.init = 48, .step = 24) %>% 
+  model(
+    SES = ETS(credit_in_millions~ error("A") + trend("N") + season("N")),
+    Damped = ETS(credit_in_millions ~ error("A") + trend("Ad") + season("N"))
+    
+    )
+fit2 %>% 
+  forecast(h= "12 months") %>% 
+  accuracy(TSCredit_Diff) %>% 
+  arrange(RMSE)
 ```
 
 ## Fitting best model
@@ -107,9 +107,9 @@ accuracy(fit, credit)
 ```{r- best model}
 BestModelFit <- train %>% 
   model(
-    hw = ETS(credit_in_millions)
+    SES = ETS(credit_in_millions~ error("A") + trend("N") + season("N")
   )
-#RMSE = .132, next best is tslm at .145
+#RMSE = .130, next best is damped at .132
 ```
 
 ## Forecasting 12 months in future

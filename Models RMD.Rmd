@@ -11,9 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r- setup}
 library(fpp3)
-
 credit <- read.csv("credit.csv")
-
 creditIncr <- transform(credit, credit_in_millions = rev(credit_in_millions))
 ```
 
@@ -24,7 +22,6 @@ creditIncr %>%
   mutate(Month = seq(as.Date("1981/1/1"), by = "month", length.out = nrow(creditIncr))) %>%
   mutate(Month = yearmonth(Month)) %>% 
   as_tsibble(index = Month) -> TSCredit
-
 TSCredit %>% 
   autoplot()
 ```
@@ -34,15 +31,12 @@ TSCredit %>%
 ```{r- differencing}
 TSCredit %>%
   features(credit_in_millions, unitroot_kpss)
-
 TSCredit %>%
   features(credit_in_millions, unitroot_ndiffs)
-
 TSCredit_Diff <- TSCredit %>%
   mutate(y = credit_in_millions) %>% 
   mutate(y = difference(y, 12)) %>% 
   mutate(y = difference(y))
-
 TSCredit_Diff %>% 
   autoplot(y)
 ```
@@ -52,7 +46,6 @@ TSCredit_Diff %>%
 ```{r- train and test}
 train <- TSCredit_Diff %>% 
   filter(Month < yearmonth("2021 Jan"))
-
 test <- TSCredit_Diff %>% 
   filter(Month >= yearmonth("2021 Jan"))
 ```
@@ -66,7 +59,7 @@ TSCredit_Diff %>%
         hw = ETS(credit_in_millions),
         Mean = MEAN(credit_in_millions),
         SNaive = SNAIVE(credit_in_millions),
-        NNETAR(sqrt(credit_in_millions))
+        nnet = NNETAR(sqrt(credit_in_millions))
         )
 ```
 
@@ -80,7 +73,7 @@ fit <- TSCredit_Diff %>%
     Drift= RW(credit_in_millions ~ drift()),
     hw = ETS(credit_in_millions),
     SNaive = SNAIVE(credit_in_millions),
-    NNETAR(sqrt(credit_in_millions))
+    nnet = NNETAR(sqrt(credit_in_millions))
   )
 
 fit %>% 
@@ -94,14 +87,14 @@ fit %>%
 ```{r- best model}
 BestModelFit <- train %>% 
   model(
-    
+    hw = ETS(credit_in_millions)
   )
+#RMSE = .132, next best is tslm at .145
 ```
 
 ## Forecasting 12 months in future
 
 ```{r- forecasting}
-
 ```
 
 ## IF we want to use RMSE function (this is the last part of HW 7 I thought it would make interpretations easier but we can definitely remove it)
@@ -109,10 +102,8 @@ BestModelFit <- train %>%
 ```{r}
 preds <- forecast(BestModelFit, holdout)
 y_preds <- preds$.mean
-
 rmse <- function(y_actual, y_pred) {
   sqrt(mean((y_actual - y_pred)^2))
 }
-
 rmse(holdout$credit_in_millions, y_preds)
 ```

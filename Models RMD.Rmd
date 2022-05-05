@@ -118,7 +118,7 @@ BestModelFit <- train %>%
 
 BestModelFit %>% 
   forecast(test) %>% 
-  autoplot() + autolayer(test) + autolayer(train[420:480,])
+  autoplot() + autolayer(TSCredit_Diff[400:492,])
 ```
 
 ## Forecasting 12 months in future

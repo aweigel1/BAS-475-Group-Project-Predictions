@@ -122,7 +122,7 @@ secondModelFit %>%
 ```{r- best model}
 BestModelFit <- train %>% 
   model(
-    stepwise = ARIMA(credit_in_millions, stepwise = FALSE, approximation = FALSE)
+    ARIMA = ARIMA(credit_in_millions, stepwise = FALSE, approximation = FALSE)
   )
 BestModelFit %>% 
   forecast(h= "12 months") %>% 

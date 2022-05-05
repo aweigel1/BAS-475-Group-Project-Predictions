@@ -124,6 +124,12 @@ BestModelFit <- train %>%
   model(
     ARIMA = ARIMA(credit_in_millions, stepwise = FALSE, approximation = FALSE)
   )
+
+BestModelFit %>% 
+  forecast(test) %>% 
+  autoplot() 
+
+
 BestModelFit %>% 
   forecast(h= "12 months") %>% 
   accuracy(TSCredit_Diff) %>% 

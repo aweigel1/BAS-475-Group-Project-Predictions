@@ -111,9 +111,9 @@ secondModelFit <- train %>%
 #RMSE = .128, next best is SES at .13
 
 
-secondModelFit %>% 
+BestModelFit %>% 
   forecast(test) %>% 
-  autoplot() + autolayer(TSCredit_Diff[400:492,]) + ggtitle("Forecast of Stepwise Model") + easy_center_title()
+  autoplot() + autolayer(TSCredit_Diff[400:492,]) + ggtitle("Forecast of ARIMA Model") + easy_center_title()
 
 ```
 

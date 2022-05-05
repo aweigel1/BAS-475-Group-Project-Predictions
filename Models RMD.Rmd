@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r- setup}
 library(fpp3)
+library(ggeasy)
 credit <- read.csv("credit.csv")
 creditIncr <- transform(credit, credit_in_millions = rev(credit_in_millions))
 ```
@@ -116,9 +117,10 @@ BestModelFit <- train %>%
   )
 #RMSE = .128, next best is SES at .13
 
+
 BestModelFit %>% 
   forecast(test) %>% 
-  autoplot() + autolayer(TSCredit_Diff[400:492,])
+  autoplot() + autolayer(TSCredit_Diff[400:492,]) + ggtitle("Forecast of Stepwise Model") + easy_center_title()
 ```
 
 ## Forecasting 12 months in future

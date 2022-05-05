@@ -104,7 +104,16 @@ fit %>%
   arrange(RMSE)
 
 
-#models i havent fit yet 
+secondModelFit <- train %>% 
+  model(
+    stepwise = ARIMA(credit_in_millions)
+  )
+#RMSE = .128, next best is SES at .13
+
+
+secondModelFit %>% 
+  forecast(test) %>% 
+  autoplot() + autolayer(TSCredit_Diff[400:492,]) + ggtitle("Forecast of Stepwise Model") + easy_center_title()
 
 ```
 

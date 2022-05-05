@@ -113,14 +113,12 @@ fit %>%
 ```{r- best model}
 BestModelFit <- train %>% 
   model(
-    stepwise = ARIMA(credit_in_millions)
+    stepwise = ARIMA(credit_in_millions, stepwise = FALSE, approximation = FALSE)
   )
-#RMSE = .128, next best is SES at .13
-
-
 BestModelFit %>% 
-  forecast(test) %>% 
-  autoplot() + autolayer(TSCredit_Diff[400:492,]) + ggtitle("Forecast of Stepwise Model") + easy_center_title()
+  forecast(h= "12 months") %>% 
+  accuracy(TSCredit_Diff) %>% 
+  arrange(RMSE)
 ```
 
 ## Forecasting 12 months in future

@@ -115,6 +115,10 @@ BestModelFit <- train %>%
     stepwise = ARIMA(credit_in_millions)
   )
 #RMSE = .128, next best is SES at .13
+
+BestModelFit %>% 
+  forecast(test) %>% 
+  autoplot() + autolayer(test) + autolayer(train[420:480,])
 ```
 
 ## Forecasting 12 months in future

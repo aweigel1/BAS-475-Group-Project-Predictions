@@ -104,13 +104,6 @@ fit %>%
 
 
 #models i havent fit yet 
-fit %>%
-  model(NNET = NNETAR(credit_in_millions),
-  arima012011 = ARIMA(Employed ~ pdq(0,1,2) + PDQ(0,1,1)),
-  arima210011 = ARIMA(Employed ~ pdq(2,1,0) + PDQ(0,1,1)),
-  arima012011 = ARIMA(credit_in_millions ~ pdq(0,1,2) + PDQ(0,1,1)),
-  NNET = NNETAR(credit_in_millions),
-  auto = ARIMA(Employed, stepwise = FALSE, approx = FALSE))
 
 ```
 

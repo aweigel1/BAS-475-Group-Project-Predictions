@@ -157,7 +157,8 @@ rmse(test$credit_in_millions, y_preds)
 
 ```{r}
 write.csv(
-  BestModelFit,
+  BestModelFit %>% 
+  forecast(h= "12 months"),
   file = "predictions.csv",
   row.names = FALSE
 )
